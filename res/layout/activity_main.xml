@@ -9,11 +9,9 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/createTripButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
         android:layout_marginTop="14dp"
         android:text="@string/create_trip" />
 
@@ -21,9 +19,9 @@
         android:id="@+id/viewTripButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-        android:layout_below="@+id/button1"
+        android:layout_alignLeft="@+id/createTripButton"
+        android:layout_alignRight="@+id/createTripButton"
+        android:layout_below="@+id/createTripButton"
         android:text="@string/view_trip" />
 
 </RelativeLayout>

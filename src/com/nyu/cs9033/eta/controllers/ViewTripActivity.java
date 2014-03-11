@@ -26,7 +26,7 @@ public class ViewTripActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 		Log.v(TAG, "Got Intent");
 
-		EditText TV = (EditText) findViewById(R.id.viewTripTextView);
+		TextView TV = (TextView) findViewById(R.id.viewTripTextView);
 
 		if (extras != null) {
 			// Log.v(TAG, "Got Intent");
@@ -41,7 +41,8 @@ public class ViewTripActivity extends Activity {
 				sb.append("The following people will be joining:-\n");
 				Person[] parr = trip.getTripPersons();
 				for (Person p : parr) {
-					sb.append(p.getName() + "(" + p.getCurrentLocation() + ")\n");
+					sb.append(p.getName() + "(" + p.getCurrentLocation()
+							+ ")\n");
 				}
 				TV.setText(sb.toString());
 			} else {

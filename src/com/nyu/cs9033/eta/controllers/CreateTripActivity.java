@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class CreateTripActivity extends Activity {
 	private static final String TAG = "CreateTripActivity";
@@ -25,6 +26,7 @@ public class CreateTripActivity extends Activity {
 	EditText tripDate;
 	EditText tripTime;
 	EditText tripLocation;
+	TextView tripPersons;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class CreateTripActivity extends Activity {
 		setContentView(R.layout.create_trip_activity);
 		// Initialize Persons array
 		// Log.v(TAG, "Done with UI. Init Data");
+		tripPersons = (TextView) findViewById(R.id.tripPersonsList);
 		persons = new ArrayList<Person>();
 		// Get Buttons
 		addButton = (Button) findViewById(R.id.addButton);
@@ -52,6 +55,7 @@ public class CreateTripActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				TextView tripPersons = CreateTripActivity.this.tripPersons;
 				String personName = CreateTripActivity.this.personName
 						.getText().toString();
 				String currentLocation = CreateTripActivity.this.currentLocation
@@ -65,6 +69,8 @@ public class CreateTripActivity extends Activity {
 					CreateTripActivity.this.personName.setText(R.string.blank);
 					CreateTripActivity.this.currentLocation
 							.setText(R.string.blank);
+					tripPersons.setText(tripPersons.getText() + personName
+							+ "(" + currentLocation + ")\n");
 				}
 			}
 		});

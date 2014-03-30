@@ -1,11 +1,7 @@
 package com.nyu.cs9033.eta.controllers;
 
 import java.util.ArrayList;
-import com.nyu.cs9033.eta.models.Person;
-import com.nyu.cs9033.eta.models.Trip;
-import com.nyu.cs9033.eta.R;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.nyu.cs9033.eta.R;
+import com.nyu.cs9033.eta.models.Person;
+import com.nyu.cs9033.eta.models.Trip;
+
 public class CreateTripActivity extends Activity {
+	@SuppressWarnings("unused")
 	private static final String TAG = "CreateTripActivity";
 
 	ArrayList<Person> persons;

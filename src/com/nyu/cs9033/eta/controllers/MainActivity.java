@@ -1,15 +1,16 @@
 package com.nyu.cs9033.eta.controllers;
 
-import com.nyu.cs9033.eta.models.Trip;
-import com.nyu.cs9033.eta.R;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.app.Activity;
-import android.content.Intent;
+
+import com.nyu.cs9033.eta.R;
+import com.nyu.cs9033.eta.models.Trip;
 
 public class MainActivity extends Activity {
-
+	@SuppressWarnings("unused")
 	private static final String TAG = "MainActivity";
 	private Button createTripButton;
 	private Button viewTripButton;

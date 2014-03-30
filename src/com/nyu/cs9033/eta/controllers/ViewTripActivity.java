@@ -1,19 +1,17 @@
 package com.nyu.cs9033.eta.controllers;
 
-import com.nyu.cs9033.eta.models.Person;
-import com.nyu.cs9033.eta.models.Trip;
-import com.nyu.cs9033.eta.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nyu.cs9033.eta.R;
+import com.nyu.cs9033.eta.models.Person;
+import com.nyu.cs9033.eta.models.Trip;
+
 public class ViewTripActivity extends Activity {
-	public static final String TAG = "ViewTripActivity";
+	@SuppressWarnings("unused")
+	private static final String TAG = "ViewTripActivity";
 	Trip trip = null;
 
 	// LinearLayout layout;
@@ -24,7 +22,7 @@ public class ViewTripActivity extends Activity {
 		setContentView(R.layout.view_trip);
 		// layout = (LinearLayout) findViewById(R.id.view_trip_layout);
 		Bundle extras = getIntent().getExtras();
-		Log.v(TAG, "Got Intent");
+//		Log.v(TAG, "Got Intent");
 
 		TextView TV = (TextView) findViewById(R.id.viewTripTextView);
 
@@ -33,7 +31,7 @@ public class ViewTripActivity extends Activity {
 			trip = (Trip) extras.getParcelable("trip");
 			StringBuffer sb = new StringBuffer();
 			if (trip != null) {
-				Log.v(TAG, "Got Intent2");
+//				Log.v(TAG, "Got Intent2");
 				sb.append("Trip Name : " + trip.getTripDate() + "\n");
 				sb.append("Trip Location : " + trip.getTripDate() + "\n");
 				sb.append("Trip Date : " + trip.getTripDate() + "\n");

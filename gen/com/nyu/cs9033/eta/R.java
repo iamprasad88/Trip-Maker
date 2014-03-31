@@ -21,42 +21,65 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int border=0x7f020000;
+        public static final int ic_action_accept=0x7f020001;
+        public static final int ic_action_cancel=0x7f020002;
+        public static final int ic_action_new=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000d;
-        public static final int addButton=0x7f080009;
+        public static final int EditTripDate=0x7f080006;
+        public static final int action_settings=0x7f080017;
+        public static final int add_person=0x7f080016;
+        public static final int cancel_trip=0x7f080015;
         public static final int createTripButton=0x7f080000;
-        public static final int currentLocation=0x7f080008;
-        public static final int personName=0x7f080007;
-        public static final int saveButton=0x7f08000a;
-        public static final int tripDate=0x7f080004;
-        public static final int tripLocation=0x7f080003;
-        public static final int tripName=0x7f080002;
-        public static final int tripPersonsList=0x7f080006;
-        public static final int tripTime=0x7f080005;
+        public static final int create_trip_llayout=0x7f080002;
+        public static final int editTripLocation=0x7f080005;
+        public static final int editTripName=0x7f080004;
+        public static final int save_trip=0x7f080014;
+        public static final int savedtripdate=0x7f08000c;
+        public static final int savedtripname=0x7f08000b;
+        public static final int savedtriptime=0x7f08000d;
+        public static final int setdate=0x7f080007;
+        public static final int show_people_in_ct_llayout=0x7f080003;
+        public static final int textView1=0x7f080012;
+        public static final int textView2=0x7f080013;
         public static final int viewTripButton=0x7f080001;
-        public static final int viewTripTextView=0x7f08000c;
-        public static final int view_trip_layout=0x7f08000b;
+        public static final int viewTripDate=0x7f080011;
+        public static final int viewTripLocation=0x7f080010;
+        public static final int viewTripName=0x7f08000f;
+        public static final int view_person_row_location=0x7f08000a;
+        public static final int view_person_row_name=0x7f080008;
+        public static final int view_person_row_ph_number=0x7f080009;
+        public static final int view_trip_layout=0x7f08000e;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int create_trip_activity=0x7f030001;
-        public static final int view_trip=0x7f030002;
+        public static final int edit_trip_layout=0x7f030002;
+        public static final int show_people_layout=0x7f030003;
+        public static final int view_person_row=0x7f030004;
+        public static final int view_saved_trip_activity=0x7f030005;
+        public static final int view_trip=0x7f030006;
+        public static final int view_trip_layout=0x7f030007;
+        public static final int view_trip_row=0x7f030008;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
+        public static final int edit_trip=0x7f070000;
+        public static final int main=0x7f070001;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
-        public static final int add_button=0x7f050006;
+        public static final int add_person_button=0x7f050006;
         public static final int app_name=0x7f050000;
         public static final int blank=0x7f05000b;
+        public static final int cancel_button=0x7f05000f;
         public static final int create_trip=0x7f050003;
         public static final int current_location=0x7f050008;
         public static final int hello_world=0x7f050002;
         public static final int person_name=0x7f050007;
         public static final int save_button=0x7f050005;
+        public static final int set_date=0x7f050010;
         public static final int trip_date=0x7f050009;
         public static final int trip_location=0x7f05000c;
         public static final int trip_name=0x7f050004;

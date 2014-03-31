@@ -1,28 +1,31 @@
 package com.nyu.cs9033.eta.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+import java.util.Calendar;
 
-public class Trip implements Parcelable {
+public class Trip
+// implements Parcelable
+{
+	@SuppressWarnings("unused")
 	private static final String TAG = "Trip";
 
-	String tripName;
-	String tripDate;
-	String tripTime;
-	Person[] tripPersons;
-	Parcelable[] tripPersonParcellable;
-	String tripLocation;
+	public String tripName;
+	// public String tripDate;
+	// public String tripTime;
+	public Person[] tripPersons;
+	// Parcelable[] tripPersonParcellable;
+	public String tripLocation;
+	public Calendar tripDate;
 
-	public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
-		public Trip createFromParcel(Parcel p) {
-			return new Trip(p);
-		}
-
-		public Trip[] newArray(int size) {
-			return new Trip[size];
-		}
-	};
+	// public static final Parcelable.Creator<Trip> CREATOR = new
+	// Parcelable.Creator<Trip>() {
+	// public Trip createFromParcel(Parcel p) {
+	// return new Trip(p);
+	// }
+	//
+	// public Trip[] newArray(int size) {
+	// return new Trip[size];
+	// }
+	// };
 
 	/**
 	 * Create a Trip model object from a Parcel
@@ -30,23 +33,28 @@ public class Trip implements Parcelable {
 	 * @param p
 	 *            The Parcel used to populate the Model fields.
 	 */
-	public Trip(Parcel p) {
 
-		Parcelable[] Parr = p
-				.readParcelableArray(Person.class.getClassLoader());
-		this.tripPersons = new Person[Parr.length];
+	public Trip() {
 
-		for (int i = 0; i < Parr.length; i++) {
-			Log.v(TAG, "Added " + i);
-			this.tripPersons[i] = (Person) Parr[i];
-		}
-		String[] strarr = p.createStringArray();
-
-		tripName = strarr[0];
-		tripDate = strarr[1];
-		tripTime = strarr[2];
-		tripLocation = strarr[3];
 	}
+
+	// public Trip(Parcel p) {
+	//
+	// Parcelable[] Parr = p
+	// .readParcelableArray(Person.class.getClassLoader());
+	// this.tripPersons = new Person[Parr.length];
+	//
+	// for (int i = 0; i < Parr.length; i++) {
+	// Log.i(TAG, "Added " + i);
+	// this.tripPersons[i] = (Person) Parr[i];
+	// }
+	// String[] strarr = p.createStringArray();
+	//
+	// tripName = strarr[0];
+	// SimpleDateFormat s = new SimpleDateFormat(strarr[1]);
+	// tripDate = s.getCalendar();
+	// tripLocation = strarr[3];
+	// }
 
 	/**
 	 * Create a Trip model object from arguments
@@ -59,29 +67,28 @@ public class Trip implements Parcelable {
 	// // TODO - fill in here, please note you must have more arguments here
 	// }
 
-	@Override
-	public void writeToParcel(Parcel p, int flags) {
-
-		p.writeParcelableArray(this.tripPersons, flags);
-		p.writeStringArray(new String[] { tripName, tripDate, tripTime,
-				tripLocation });
-		// TODO - fill in here
-	}
-
+	// @Override
+	// public void writeToParcel(Parcel p, int flags) {
+	//
+	// p.writeParcelableArray(this.tripPersons, flags);
+	// p.writeStringArray(new String[] { tripName, tripDate, tripTime,
+	// tripLocation });
+	// // TODO - fill in here
+	// }
 	/**
 	 * Feel free to add additional functions as necessary below.
 	 */
-	public Trip(String tripName, String tripLocation, String tripDate,
-			String tripTime, Person[] tripPersons) {
+	public Trip(String tripName, String tripLocation, Calendar tripDate,
+			Person[] tripPersons) {
 		this.tripDate = tripDate;
-		this.tripTime = tripTime;
+		// this.tripTime = tripTime;
 		this.tripLocation = tripLocation;
 		this.tripName = tripName;
 		this.tripPersons = tripPersons;
 
 	}
 
-	public String getTripDate() {
+	public Calendar getTripDate() {
 		return tripDate;
 	}
 
@@ -97,16 +104,12 @@ public class Trip implements Parcelable {
 		return tripPersons;
 	}
 
-	public String getTripTime() {
-		return tripTime;
-	}
-
 	/**
 	 * Do not implement
 	 */
-	@Override
-	public int describeContents() {
-		// Do not implement!
-		return 0;
-	}
+	// @Override
+	// public int describeContents() {
+	// // Do not implement!
+	// return 0;
+	// }
 }

@@ -7,7 +7,7 @@
     <string name="create_trip">Create Trip</string>
     <string name="trip_name">Trip Name</string>
     <string name="save_button">Save</string>
-    <string name="add_button">Add</string>
+    <string name="add_person_button">Add Person</string>
     <string name="person_name">Person Name</string>
     <string name="current_location">Current Location</string>
     <string name="trip_date">Trip Date (YYYY/MM/DD)</string>
@@ -16,5 +16,7 @@
     <string name="trip_location">Trip Location</string>
     <string name="view_trip">View Trip</string>
     <string name="trip_not_created">Trip Not Created</string>
+    <string name="cancel_button">Cancel Button</string>
+    <string name="set_date">Set Date</string>
 
 </resources>

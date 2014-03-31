@@ -1,15 +1,21 @@
 package com.nyu.cs9033.eta.controllers;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nyu.cs9033.eta.R;
-import com.nyu.cs9033.eta.models.Person;
+import com.nyu.cs9033.eta.controllers.databasehelpers.TripDataBaseHelper;
 import com.nyu.cs9033.eta.models.Trip;
 
-public class ViewTripActivity extends Activity {
+public class ViewTripActivity extends ListActivity {
 	@SuppressWarnings("unused")
 	private static final String TAG = "ViewTripActivity";
 	Trip trip = null;
@@ -18,36 +24,23 @@ public class ViewTripActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.view_trip);
-		// layout = (LinearLayout) findViewById(R.id.view_trip_layout);
-		Bundle extras = getIntent().getExtras();
-//		Log.v(TAG, "Got Intent");
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.view_trip);
 
-		TextView TV = (TextView) findViewById(R.id.viewTripTextView);
+			TripDataBaseHelper tdbh = new TripDataBaseHelper(this);
+			String from[] = tdbh.getColsTripHistoryList();
+			int to[] = new int[] { R.id.textView1, R.id.textView2 };
+			Cursor c = tdbh.getAllTrips();
 
-		if (extras != null) {
-			// Log.v(TAG, "Got Intent");
-			trip = (Trip) extras.getParcelable("trip");
-			StringBuffer sb = new StringBuffer();
-			if (trip != null) {
-//				Log.v(TAG, "Got Intent2");
-				sb.append("Trip Name : " + trip.getTripDate() + "\n");
-				sb.append("Trip Location : " + trip.getTripDate() + "\n");
-				sb.append("Trip Date : " + trip.getTripDate() + "\n");
-				sb.append("Trip Time : " + trip.getTripTime() + "\n\n");
-				sb.append("The following people will be joining:-\n");
-				Person[] parr = trip.getTripPersons();
-				for (Person p : parr) {
-					sb.append(p.getName() + "(" + p.getCurrentLocation()
-							+ ")\n");
-				}
-				TV.setText(sb.toString());
-			} else {
-				TV.setText(R.string.trip_not_created);
-			}
+			@SuppressWarnings("deprecation")
+			SimpleCursorAdapter a = new SimpleCursorAdapter(this,
+					R.layout.view_trip_row, c, from, to);
+			this.setListAdapter(a);
+		} catch (Exception e) {
+			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+
 		}
-
 	}
 
 	/**
@@ -75,5 +68,27 @@ public class ViewTripActivity extends Activity {
 	public void initView(Trip trip) {
 
 		// TODO - fill in here
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+
+		String tripID = ((TextView) l.findViewById(R.id.textView1)).getText()
+				.toString();
+		try {
+			TripDataBaseHelper td = new TripDataBaseHelper(this);
+			Trip t = td.getTrip(Long.parseLong(tripID));
+
+			Intent i = new Intent(this, SavedTripActivity.class);
+			i.putExtra("tripName", t.tripName);
+			i.putExtra("tripDate", t.tripDate);
+			i.putExtra("tripTime", t.tripTime);
+			Log.v("Here", t.tripName);
+			startActivity(i);
+		} catch (Exception e) {
+			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+		}
 	}
 }

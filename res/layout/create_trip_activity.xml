@@ -4,90 +4,18 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/trip_name" />
-
-    <EditText
-        android:id="@+id/tripName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/trip_name" />
-    
-    <EditText
-        android:id="@+id/tripLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/trip_location" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/trip_date" />
-
-    <EditText
-        android:id="@+id/tripDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/trip_time" />
-
-    <EditText
-        android:id="@+id/tripTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time" />
-    
-    <TextView 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tripPersonsList"
-        />
-
     <LinearLayout
+        android:id="@+id/create_trip_llayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <EditText
-                android:id="@+id/personName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/person_name" />
-
-            <EditText
-                android:id="@+id/currentLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/current_location" />
-        </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/show_people_in_ct_llayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_button" />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save_button" />
+        android:orientation="vertical" >
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,115 +1,117 @@
 package com.nyu.cs9033.eta.controllers;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.provider.ContactsContract;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.nyu.cs9033.eta.R;
-import com.nyu.cs9033.eta.models.Person;
+import com.nyu.cs9033.eta.controllers.databasehelpers.TripDataBaseHelper;
 import com.nyu.cs9033.eta.models.Trip;
 
 public class CreateTripActivity extends Activity {
 	@SuppressWarnings("unused")
 	private static final String TAG = "CreateTripActivity";
 
-	ArrayList<Person> persons;
-	Button addButton;
-	Button saveButton;
-	EditText personName;
-	EditText currentLocation;
-	EditText tripName;
-	EditText tripDate;
-	EditText tripTime;
-	EditText tripLocation;
-	TextView tripPersons;
+	private static final int CONTACT_PICK = 0;
+	public Trip trip;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.create_trip_activity);
-		// Initialize Persons array
-		// Log.v(TAG, "Done with UI. Init Data");
-		tripPersons = (TextView) findViewById(R.id.tripPersonsList);
-		persons = new ArrayList<Person>();
-		// Get Buttons
-		addButton = (Button) findViewById(R.id.addButton);
-		saveButton = (Button) findViewById(R.id.saveButton);
-		// Get Trip Text Fields
-		tripName = (EditText) findViewById(R.id.tripName);
-		tripDate = (EditText) findViewById(R.id.tripDate);
-		tripTime = (EditText) findViewById(R.id.tripTime);
-		tripLocation = (EditText) findViewById(R.id.tripLocation);
-		// Get Person text Fields
-		personName = (EditText) findViewById(R.id.personName);
-		currentLocation = (EditText) findViewById(R.id.currentLocation);
+		FragmentManager fm = getFragmentManager();
+		FragmentTransaction txn = fm.beginTransaction();
+		EditTripFragment etf = new EditTripFragment();
+		ShowPeopleFragment spf = new ShowPeopleFragment();
+		txn.add(R.id.create_trip_llayout, etf, "Create Trip");
+		txn.add(R.id.show_people_in_ct_llayout, spf, "Show People");
+		txn.commit();
 
-		// Log.v(TAG, "Init Listeners");
-		// Set listener for Add button
-		addButton.setOnClickListener(new View.OnClickListener() {
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("tripid")) {
+			TripDataBaseHelper t = new TripDataBaseHelper(this);
+			this.trip = t.getTrip((Long.parseLong(savedInstanceState
+					.getString("tripid"))));
+			// spf.setPersons();
+		}
+	}
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				TextView tripPersons = CreateTripActivity.this.tripPersons;
-				String personName = CreateTripActivity.this.personName
-						.getText().toString();
-				String currentLocation = CreateTripActivity.this.currentLocation
-						.getText().toString();
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		outState.putParcelable("trip", trip);
+	}
 
-				if (personName.equals("") == false) {
-					// Log.v("AddButton", "Added " + personName + " : "
-					// + currentLocation);
-					CreateTripActivity.this.persons.add(new Person(personName,
-							currentLocation));
-					CreateTripActivity.this.personName.setText(R.string.blank);
-					CreateTripActivity.this.currentLocation
-							.setText(R.string.blank);
-					tripPersons.setText(tripPersons.getText() + personName
-							+ "(" + currentLocation + ")\n");
-				}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.add_person:
+			Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+					ContactsContract.Contacts.CONTENT_URI);
+			startActivityForResult(contactPickerIntent, CONTACT_PICK);
+			break;
+		case R.id.cancel_trip:
+			cancelTripCreation();
+			break;
+		case R.id.save_trip:
+
+			FragmentManager fm = getFragmentManager();
+			ShowPeopleFragment sp = (ShowPeopleFragment) fm
+					.findFragmentByTag("Show People");
+			EditTripFragment et = (EditTripFragment) fm
+					.findFragmentByTag("Create Trip");
+			trip = new Trip();
+			et.updateTrip();
+			trip.tripDate = et.tripDate;
+			trip.tripTime = et.tripTime;
+			// trip.tripLocation = et.tripLocation;
+			trip.tripName = et.tripName;
+			trip.tripPersons = sp.getPersons();
+			Toast.makeText(this, "Saving", Toast.LENGTH_SHORT).show();
+			Log.v(TAG, "TripDate=" + trip.tripDate);
+
+			if (persistTrip(trip))
+				Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case CONTACT_PICK:
+
+				String contactId = data.getData().getLastPathSegment()
+						.toString();
+				FragmentManager fm = getFragmentManager();
+				ShowPeopleFragment f = (ShowPeopleFragment) fm
+						.findFragmentByTag("Show People");
+				f.addPerson(contactId);
+
+				break;
 			}
-		});
+		}
+	}
 
-		// Set Listener for Save button
-		saveButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-				String personName = CreateTripActivity.this.personName
-						.getText().toString();
-				String currentLocation = CreateTripActivity.this.currentLocation
-						.getText().toString();
-
-				if (personName.equals("") == false) {
-					// Log.v("AddButton", "Added " + personName + " : "
-					// + currentLocation);
-					CreateTripActivity.this.persons.add(new Person(personName,
-							currentLocation));
-					CreateTripActivity.this.personName.setText(R.string.blank);
-					CreateTripActivity.this.currentLocation
-							.setText(R.string.blank);
-				}
-
-				Trip trip = createTrip();
-				Intent resultIntent = new Intent();
-				// Log.v(TAG, "Create New Intent");
-				resultIntent.putExtra("trip", trip);
-				// Log.v(TAG, "Loaded Trip");
-				setResult(Activity.RESULT_OK, resultIntent);
-				// Log.v(TAG, "Set Result");
-				finish();
-				// Log.v(TAG, "Finished");
-			}
-		});
-		// TODO - fill in here
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.edit_trip, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	/**
@@ -119,27 +121,7 @@ public class CreateTripActivity extends Activity {
 	 */
 	public Trip createTrip() {
 
-		// Log.v(TAG, "Creating Trip");
-		// TODO - fill in here
-		String tripName = CreateTripActivity.this.tripName.getText().toString();
-		// Log.v(TAG, "Added Name");
-		String tripLocation = CreateTripActivity.this.tripLocation.getText()
-				.toString();
-		// Log.v(TAG, "Added Loc");
-		String tripDate = CreateTripActivity.this.tripDate.getText().toString();
-		// Log.v(TAG, "Added Date");
-		String tripTime = CreateTripActivity.this.tripTime.getText().toString();
-		// Log.v(TAG, "Added Time");
-		Person[] tripPersons = new Person[CreateTripActivity.this.persons
-				.size()];
-
-		CreateTripActivity.this.persons.toArray(tripPersons);
-		// Log.v(TAG, "Created Persons");
-		Trip trip = new Trip(tripName, tripLocation, tripDate, tripTime,
-				tripPersons);
-		// Log.v(TAG, "Added Persons");
-		// Log.v(TAG, "Done Creating Trip");
-		return trip;
+		return null;
 	}
 
 	/**
@@ -153,9 +135,14 @@ public class CreateTripActivity extends Activity {
 	 */
 	public boolean persistTrip(Trip trip) {
 
-		// TODO - fill in here
+		TripDataBaseHelper dbh = new TripDataBaseHelper(this);
 
-		return false;
+		try {
+			dbh.insertTrip(trip);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	/**
@@ -169,6 +156,5 @@ public class CreateTripActivity extends Activity {
 	 */
 	public void cancelTripCreation() {
 
-		// TODO - fill in here
 	}
 }

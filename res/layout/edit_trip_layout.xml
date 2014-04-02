@@ -15,13 +15,12 @@
         <requestFocus android:layout_width="match_parent" />
     </EditText>
 
-    <EditText
+    <TextView
         android:id="@+id/editTripLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/trip_location"
-        android:inputType="text" />
+        android:hint="@string/trip_location" />
 
     <LinearLayout
         android:layout_width="match_parent"

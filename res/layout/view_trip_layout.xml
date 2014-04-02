@@ -8,6 +8,7 @@
         android:id="@+id/viewTripName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:ems="10"
         android:hint="@string/trip_name" >
 
@@ -18,6 +19,7 @@
         android:id="@+id/viewTripLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:ems="10"
         android:hint="@string/trip_location" />
 
@@ -25,6 +27,8 @@
         android:id="@+id/viewTripDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" />
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:hint="@string/trip_date" />
 
 </LinearLayout>

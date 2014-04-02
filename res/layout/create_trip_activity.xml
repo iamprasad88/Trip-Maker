@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
     <LinearLayout
-        android:id="@+id/create_trip_llayout"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/create_trip_llayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/show_people_in_ct_llayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/setLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Location" />
+
+        <LinearLayout
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/show_people_in_ct_llayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

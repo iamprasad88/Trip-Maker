@@ -20,9 +20,10 @@ import android.widget.TimePicker;
 import com.nyu.cs9033.eta.R;
 
 public class EditTripFragment extends Fragment implements
-		DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener
+		DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-{
+	@SuppressWarnings("unused")
+	private static String TAG = "EditTripFragment";
 
 	Activity activity = null;
 	public String tripName;
@@ -36,6 +37,8 @@ public class EditTripFragment extends Fragment implements
 
 	public void setTripLocation(String tripLocation) {
 		this.tripLocation = tripLocation;
+		((TextView) getView().findViewById(R.id.editTripLocation))
+				.setText(tripLocation);
 	}
 
 	int year, month, day, hour, min;
@@ -63,15 +66,17 @@ public class EditTripFragment extends Fragment implements
 	public void updateTrip() {
 		tripName = ((EditText) getView().findViewById(R.id.editTripName))
 				.getText().toString();
+		tripLocation = ((TextView) getView()
+				.findViewById(R.id.editTripLocation)).getText().toString();
 
 	}
 
 	public void updateViews() {
 		((EditText) getView().findViewById(R.id.editTripName))
 				.setText(tripName);
-		((EditText) getView().findViewById(R.id.editTripLocation))
+		((TextView) getView().findViewById(R.id.editTripLocation))
 				.setText(tripLocation);
-		((TextView) getView().findViewById(R.id.editTripLocation)).setText(year
+		((TextView) getView().findViewById(R.id.EditTripDate)).setText(year
 				+ "-" + month + "-" + day + " " + hour + ":" + min);
 
 	}
@@ -119,7 +124,7 @@ public class EditTripFragment extends Fragment implements
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 		hour = hourOfDay;
 		min = minute;
-		((TextView) getView().findViewById(R.id.editTripLocation)).setText(year
+		((TextView) getView().findViewById(R.id.EditTripDate)).setText(year
 				+ "-" + month + "-" + day + " " + hour + ":" + min);
 	}
 
@@ -127,11 +132,17 @@ public class EditTripFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		tripDate = Calendar.getInstance();
+		setTripDate(Calendar.getInstance());
 		year = tripDate.get(Calendar.YEAR);
 		month = tripDate.get(Calendar.MONTH);
 		day = tripDate.get(Calendar.DAY_OF_MONTH);
 		hour = tripDate.get(Calendar.HOUR_OF_DAY);
 		min = tripDate.get(Calendar.MINUTE);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateViews();
 	}
 }

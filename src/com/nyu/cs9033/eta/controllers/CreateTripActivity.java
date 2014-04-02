@@ -1,5 +1,6 @@
 package com.nyu.cs9033.eta.controllers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -10,19 +11,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.nyu.cs9033.eta.R;
 import com.nyu.cs9033.eta.controllers.databasehelpers.TripDataBaseHelper;
 import com.nyu.cs9033.eta.models.Trip;
 
 public class CreateTripActivity extends Activity {
-	@SuppressWarnings("unused")
+
 	private static final String TAG = "CreateTripActivity";
 
 	private static final int CONTACT_PICK = 0;
 	public Trip trip;
+	private ShowPeopleFragment spf;
+	private EditTripFragment etf;
+	private MapFragment map;
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,12 +42,36 @@ public class CreateTripActivity extends Activity {
 		setContentView(R.layout.create_trip_activity);
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction txn = fm.beginTransaction();
-		EditTripFragment etf = new EditTripFragment();
-		ShowPeopleFragment spf = new ShowPeopleFragment();
+		etf = new EditTripFragment();
+		spf = new ShowPeopleFragment();
+		map = new MapFragment();
 		txn.add(R.id.create_trip_llayout, etf, "Create Trip");
 		txn.add(R.id.show_people_in_ct_llayout, spf, "Show People");
+		txn.add(R.id.map, map, "Show Map");
 		txn.commit();
 
+		Button b = (Button) findViewById(R.id.setLocation);
+
+		// map.setMenuVisibility(true);
+		b.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.d(TAG, "Clicked Map Button");
+				GoogleMap m = map.getMap();
+				LatLng fleft, fright, nleft;
+				VisibleRegion r = m.getProjection().getVisibleRegion();
+
+				fleft = r.farLeft;
+				fright = r.farRight;
+				nleft = r.nearLeft;
+
+				double lat = (fleft.latitude + fright.latitude) / 2;
+				double lon = (fleft.longitude + nleft.longitude) / 2;
+				etf.setTripLocation("Lat: " + lat + " Long:" + lon);
+			}
+		});
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey("tripid")) {
 			TripDataBaseHelper t = new TripDataBaseHelper(this);
@@ -43,13 +79,6 @@ public class CreateTripActivity extends Activity {
 					.getString("tripid"))));
 			// spf.setPersons();
 		}
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		outState.putParcelable("trip", trip);
 	}
 
 	@Override
@@ -64,25 +93,36 @@ public class CreateTripActivity extends Activity {
 			cancelTripCreation();
 			break;
 		case R.id.save_trip:
+			boolean err = false;
+			String errorStr = "";
 
-			FragmentManager fm = getFragmentManager();
-			ShowPeopleFragment sp = (ShowPeopleFragment) fm
-					.findFragmentByTag("Show People");
-			EditTripFragment et = (EditTripFragment) fm
-					.findFragmentByTag("Create Trip");
 			trip = new Trip();
-			et.updateTrip();
-			trip.tripDate = et.tripDate;
-			trip.tripTime = et.tripTime;
-			// trip.tripLocation = et.tripLocation;
-			trip.tripName = et.tripName;
-			trip.tripPersons = sp.getPersons();
-			Toast.makeText(this, "Saving", Toast.LENGTH_SHORT).show();
-			Log.v(TAG, "TripDate=" + trip.tripDate);
+			etf.updateTrip();
+			trip.tripDate = etf.tripDate;
+			trip.tripName = etf.tripName;
+			if (trip.tripName == null || trip.tripName.equals("")) {
+				err = true;
+				errorStr += "Trip Name cannot be blank\n";
+			}
+			trip.tripPersons = spf.getPersons();
+			if (trip.tripPersons == null || trip.tripPersons.length == 0) {
+				err = true;
+				errorStr += "Please add atleast one contact\n";
+			}
+			trip.tripLocation = etf.tripLocation;
+			if (trip.tripLocation == null || trip.tripLocation.equals("")) {
+				err = true;
+				errorStr += "Trip Location cannot be blank";
+			}
+			if (err) {
+				Toast.makeText(this, errorStr, Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this, "Saving", Toast.LENGTH_SHORT).show();
 
-			if (persistTrip(trip))
-				Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-			finish();
+				if (persistTrip(trip))
+					Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+				finish();
+			}
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -94,15 +134,27 @@ public class CreateTripActivity extends Activity {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case CONTACT_PICK:
+				try {
+					String contactId = data.getData().getLastPathSegment()
+							.toString();
+					Log.d(TAG, "Contact ID = " + contactId);
+					// FragmentManager fm = getFragmentManager();
+					// if (fm == null) {
+					// Log.d(TAG, "fm is null");
+					// }
 
-				String contactId = data.getData().getLastPathSegment()
-						.toString();
-				FragmentManager fm = getFragmentManager();
-				ShowPeopleFragment f = (ShowPeopleFragment) fm
-						.findFragmentByTag("Show People");
-				f.addPerson(contactId);
+					if (spf == null) {
+						Log.d(TAG, "spf is null");
+					}
+					spf.addPerson(contactId);
 
-				break;
+					Log.d(TAG, "Added Person");
+
+					break;
+				} catch (Exception e) {
+					Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT)
+							.show();
+				}
 			}
 		}
 	}
@@ -124,15 +176,6 @@ public class CreateTripActivity extends Activity {
 		return null;
 	}
 
-	/**
-	 * For HW2 you should treat this method as a way of sending the Trip data
-	 * back to the main Activity
-	 * 
-	 * Note: If you call finish() here the Activity eventually end and pass an
-	 * Intent back to the previous Activity using setResult().
-	 * 
-	 * @return whether the Trip was successfully persisted.
-	 */
 	public boolean persistTrip(Trip trip) {
 
 		TripDataBaseHelper dbh = new TripDataBaseHelper(this);
@@ -145,16 +188,14 @@ public class CreateTripActivity extends Activity {
 		}
 	}
 
-	/**
-	 * This method should be used when a user wants to cancel the creation of a
-	 * Trip.
-	 * 
-	 * Note: You most likely want to call this if your activity dies during the
-	 * process of a trip creation or if a cancel/back button event occurs.
-	 * Should return to the previous activity without a result using finish()
-	 * and setResult().
-	 */
 	public void cancelTripCreation() {
+		trip = null;
+		this.finish();
+	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		map.getMap().setMyLocationEnabled(true);
 	}
 }

@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import com.nyu.cs9033.eta.R;
 import com.nyu.cs9033.eta.models.Person;
 
 public class ShowPeopleFragment extends Fragment {
-	@SuppressWarnings("unused")
+
 	private static String TAG = "ShowPeopleFragment";
 	Activity activity;
 	ArrayList<Person> persons;
@@ -32,7 +33,6 @@ public class ShowPeopleFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		persons = new ArrayList<Person>();
 	}
@@ -52,6 +52,7 @@ public class ShowPeopleFragment extends Fragment {
 				return;
 			}
 		}
+		Log.d(TAG, "Checked for duplicate Contacts");
 
 		try {
 			String name = "";
@@ -119,48 +120,105 @@ public class ShowPeopleFragment extends Fragment {
 		}
 	}
 
+	public void addPerson(Person p) {
+
+		try {
+			String name = "";
+			String phNumber = "";
+
+			Toast.makeText(this.activity,
+					"Added Name:" + name + " Ph:" + phNumber,
+					Toast.LENGTH_SHORT).show();
+			String location = "LOC";
+			LinearLayout ll = (LinearLayout) this.getView();
+			LinearLayout child = new LinearLayout(this.activity);
+			child = (LinearLayout) ((LayoutInflater) this.activity
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+					.inflate(R.layout.view_person_row, null, true);
+			((TextView) child.findViewById(R.id.view_person_row_name))
+					.setText(name);
+			((TextView) child.findViewById(R.id.view_person_row_ph_number))
+					.setText(phNumber);
+			((TextView) child.findViewById(R.id.view_person_row_location))
+					.setText(location);
+			ll.addView(child);
+		} catch (RuntimeException e) {
+			Toast.makeText(this.activity, "Cannot Add this Contact",
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
 	Person[] getPersons() {
 		return persons.toArray(new Person[] {});
 	}
 
 	public void setPersons(Person[] p) {
-		persons.clear();
+		Log.d(TAG, "in setPersons");
+		if (p == null) {
+			Log.d(TAG, "p is null");
+		} else {
+			Log.d(TAG, "p is not null and has " + p.length + " items");
+		}
+		if (persons == null) {
+			persons = new ArrayList<Person>();
+		} else {
+			persons.clear();
+		}
 		for (Person i : p) {
 			persons.add(i);
 		}
-		updateViews();
+		// Log.d(TAG, "added Persons to ArrayList");
+		// updateViews();
+		// Log.d(TAG, "updated Views");
 	}
 
-	private void updateViews() {
+	// public void updateViews() {
+	// try {
+	// Log.d(TAG, "In People show");
+	// LinearLayout ll = (LinearLayout) this.getView();
+	// Log.d(TAG, "In People show 1");
+	// ll.removeAllViews();
+	// ll.requestFocus();
+	// Log.d(TAG, "In People show 2");
+	// LinearLayout child = new LinearLayout(this.activity);
+	// if (this.activity == null) {
+	// Log.d(TAG, "act is null");
+	// } else {
+	// Log.d(TAG, "act is not null");
+	// }
+	//
+	// for (Person p : persons) {
+	// child = (LinearLayout) (getActivity().getLayoutInflater()
+	// .inflate(R.layout.view_person_row, null));
+	// // .inflate(R.layout.view_person_row, null, true);
+	// Log.d(TAG, "In People show 3");
+	// ((TextView) child.findViewById(R.id.view_person_row_name))
+	// .setText(p.Name);
+	// ((TextView)
+	// child.findViewById(R.id.view_person_row_ph_number))
+	// .setText(p.PhoneNumber);
+	// Log.d(TAG, "In People show 4");
+	// ((TextView)
+	// child.findViewById(R.id.view_person_row_location))
+	// .setText(p.CurrentLocation);
+	// Log.d(TAG, "In People show 5");
+	// ll.addView(child);
+	// Log.d(TAG, "In People show 6");
 
-		LinearLayout ll = (LinearLayout) this.getView();
-		ll.removeAllViews();
-		// LinearLayout child = new LinearLayout(this.activity);
-		LinearLayout child;
-
-		for (Person p : persons) {
-
-			child = (LinearLayout) ((LayoutInflater) this.activity
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-					.inflate(R.layout.view_person_row, null, true);
-			((TextView) child.findViewById(R.id.view_person_row_name))
-					.setText(p.Name);
-			((TextView) child.findViewById(R.id.view_person_row_ph_number))
-					.setText(p.PhoneNumber);
-			((TextView) child.findViewById(R.id.view_person_row_location))
-					.setText(p.CurrentLocation);
-			ll.addView(child);
-		}
-	}
+	// addPerson(p);
+	// }
+	// } catch (Exception e) {
+	// Log.d(TAG, "Persons:" + e.toString());
+	// }
+	// }
 
 	void clear() {
 
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		updateViews();
+	public void onResume() {
+		super.onResume();
+		// updateViews();
 	}
-
 }
